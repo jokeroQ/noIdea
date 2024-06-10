@@ -33,7 +33,8 @@
     ],
     "baseUrl": ".",  // 设置项目根目录为基准
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "coms/*":["src/components/*"]
     },
   },
   "include": [

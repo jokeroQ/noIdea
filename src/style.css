@@ -9,7 +9,7 @@
 }
 #app {
   max-width: 1280px;
-  margin: 0 auto;
+  /* margin: 0 auto; */
 }
 
 body {
@@ -18,4 +18,9 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+}
+html, body, #app {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }

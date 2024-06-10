@@ -19,7 +19,9 @@
             class="input-fixed-width"
           />
         </el-form-item>
-        <el-button type="primary" @click="loginIn">登录</el-button>
+        <div class="btnGroup">
+          <el-button type="primary" @click="loginIn">登录</el-button>
+        </div>
       </el-form>
     </div>
   </GradientBackground>
@@ -30,12 +32,14 @@ import GradientBackground from "../../components/background/GradientBackground.v
 import { reactive, ref } from "vue";
 import type { FormProps } from "element-plus";
 import { delay } from "@/utils/delay";
+import { useRouter } from "vue-router";
 const labelPosition = ref<FormProps["labelPosition"]>("right");
 const formLabelAlign = reactive({
   username: "admin",
   password: "",
 });
 const isLoading = ref(false);
+const router=useRouter();
 
 async function loginIn() {
   let flag =
@@ -44,6 +48,7 @@ async function loginIn() {
     isLoading.value = true;
     await delay(2000);
     isLoading.value = false;
+    router.push('/home')
   }
   ElMessage({
     message: flag ? "登录成功" : "用户名密码错误，请重新输入",
@@ -64,6 +69,9 @@ async function loginIn() {
   margin: 0 auto;
   padding: 40px 0;
   border-radius: 20px;
+  .btnGroup {
+    text-align: right;
+  }
 }
 .input-fixed-width {
   width: 300px; /* 设置固定宽度 */
