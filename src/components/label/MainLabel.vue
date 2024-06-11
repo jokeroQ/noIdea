@@ -1,7 +1,7 @@
 <template>
   <div class="mainLabel">
     <el-card
-      v-for="i in labelData"
+      v-for="i in initData"
       :key="i.targetUrl"
       class="box"
       @click="linkTo(i.targetUrl)"
@@ -19,6 +19,10 @@ const props = defineProps<{
 const linkTo = (url: string) => {
   window.open(url, "_blank");
 };
+const initData = computed(() => {
+  let result = labelData.filter(i=>i.type==props.activeTab)
+  return result;
+});
 watch(
   () => props,
   () => {
