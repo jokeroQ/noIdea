@@ -9,11 +9,18 @@
       @dragstart="onDragStart($event, index)"
       @dragover.prevent="onDragOver(index)"
       @drop="onDrop($event, index)"
+      @mouseenter="handleHover(index)"
+      @mouseleave="handleHover(-1)"
       :class="{ hoverStyle: hoverIndex == index }"
     >
-      {{ i.title }}
+      <span>{{ i.title }}</span>
+      <!--  -->
+      <div v-if="currentIndex == index" class="edit">
+        <i-ep-edit @click="editDetail(i.targetUrl)"></i-ep-edit>
+        <i-ep-delete @click.stop="deleteItem(i.targetUrl)"></i-ep-delete>
+      </div>
     </el-card>
-    <el-card v-if="editMode" class="box" @click="showAdd">
+    <el-card v-if="editMode" class="box lastBox" @click="showAdd">
       <i-ep-plus></i-ep-plus>
     </el-card>
     <el-dialog v-model="dialogVisible" title="添加标签" width="500">
@@ -54,6 +61,7 @@ const props = defineProps<{
   activeTab: string;
   editMode: boolean;
 }>();
+const currentIndex = ref<number | null>(null);
 const draggedItemIndex = ref<number | null>(null);
 const linkTo = (url: string) => {
   window.open(url, "_blank");
@@ -95,6 +103,23 @@ const showAdd = () => {
   dialogVisible.value = true;
 };
 
+//类似hover事件
+const handleHover = (index: number) => {
+  currentIndex.value = index;
+};
+
+//编辑书签
+const editDetail = (url: string) => {};
+
+//删除书签
+const deleteItem = (url: string) => {
+  initData.value = initData.value.filter((i) => i.targetUrl !== url);
+  ElMessage({
+    message: "删除书签成功",
+    type: "success",
+  });
+};
+
 watch(
   () => props.activeTab,
   (newVal) => {
@@ -107,16 +132,37 @@ watch(
 <style lang="less" scoped>
 .mainLabel {
   display: flex;
+  flex-wrap: wrap;
+  .lastBox {
+    display: flex;
+    justify-content: center;
+    /deep/ svg {
+      margin: 0 auto;
+    }
+  }
   .box {
-    padding: 20px;
+    // padding: 20px;
     margin: 20px;
+    width: 200px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    /deep/ .el-card__body {
+      justify-content: space-between;
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
     &:hover {
       background-color: antiquewhite;
     }
     &.hoverStyle {
       // background-color: lightblue; // 悬停时的背景色
       border-top: 2px dashed blue;
+    }
+    .edit {
+      display: flex;
+      flex-direction: column;
     }
   }
   .autoBtn {

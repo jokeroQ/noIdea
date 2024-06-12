@@ -6,7 +6,7 @@
           <el-menu-item
             @click="changeTab(i.index)"
             :index="i.index"
-            v-for="i in menuList"
+            v-for="i in menus"
             :key="i.index"
             >{{ i.title }}</el-menu-item
           >
@@ -53,9 +53,7 @@
       />
       <template #footer>
         <div class="dialog-footer">
-          <el-button type="primary" @click="dialogVisible = false">
-            确认
-          </el-button>
+          <el-button type="primary" @click="addType"> 确认 </el-button>
           <el-button @click="dialogVisible = false">取消</el-button>
         </div>
       </template>
@@ -65,13 +63,14 @@
 
 <script setup lang="ts">
 import MainLabel from "@/components/label/MainLabel.vue";
-import { menuList } from "@views/home/home";
+import { menuList, Menu } from "@views/home/home";
 import { Search } from "@element-plus/icons-vue";
 import { reactive, ref } from "vue";
 import { ElMessageBox } from "element-plus";
 // const state = reactive({
 //   menuList: menuList,
 // });
+const menus = reactive<Menu[]>(menuList);
 const searchValue = ref<string>("");
 const activeTab = ref<string>("2");
 const dialogVisible = ref(false);
@@ -105,6 +104,14 @@ const exitMode = () => {
   ElMessage({
     message: "已退出编辑模式",
   });
+};
+//添加标签
+const addType = () => {
+  menus.push({
+    index: menus.length + 1,
+    title: labelName.value,
+  });
+  dialogVisible.value = false;
 };
 </script>
 <style lang="less" scoped>
