@@ -14,7 +14,7 @@
       </el-menu>
       <div class="btnGroup">
         <i-ep-folderAdd @click="createMenu" />
-        <i-ep-setting />
+        <i-ep-setting @click="goEdit" />
         <i-ep-download />
         <i-ep-upload />
         <i-ep-questionFilled />
@@ -29,10 +29,15 @@
         />
       </el-header>
       <el-main>
-        <MainLabel :activeTab="activeTab"></MainLabel>
+        <MainLabel :activeTab="activeTab" :editMode="editMode"></MainLabel>
       </el-main>
       <el-footer>
-        <p>{{ statement }}</p>
+        <div class="bottom">
+          <p>{{ statement }}</p>
+          <el-link @click="exitMode" :underline="false" v-if="editMode"
+            >退出编辑模式</el-link
+          >
+        </div>
       </el-footer>
     </el-container>
     <el-dialog
@@ -72,6 +77,7 @@ const activeTab = ref<string>("2");
 const dialogVisible = ref(false);
 const labelName = ref("");
 const statement = ref<string>("「凡所有相，皆为虚妄。若见诸相非相，即见如来」");
+const editMode = ref<boolean>(false);
 //切换菜单项
 const changeTab = (index: string) => {
   //   console.log(index);
@@ -85,6 +91,21 @@ const createMenu = () => {
 const handleClose = (done: () => void) => {
   dialogVisible.value = false;
 };
+
+//开启编辑功能
+const goEdit = () => {
+  editMode.value = true;
+  ElMessage({
+    message: "已经开启编辑功能，点击右下角可退出",
+  });
+};
+//关闭编辑模式
+const exitMode = () => {
+  editMode.value = false;
+  ElMessage({
+    message: "已退出编辑模式",
+  });
+};
 </script>
 <style lang="less" scoped>
 .btnGroup {
@@ -94,5 +115,10 @@ const handleClose = (done: () => void) => {
   svg {
     cursor: pointer;
   }
+}
+.bottom {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 </style>

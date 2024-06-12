@@ -20,7 +20,7 @@
           />
         </el-form-item>
         <div class="btnGroup">
-          <el-button type="primary" @click="loginIn">登录</el-button>
+          <el-button type="primary" @click="loginIn" @keyup.enter="loginIn">登录</el-button>
         </div>
       </el-form>
     </div>
