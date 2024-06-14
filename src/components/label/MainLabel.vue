@@ -15,9 +15,9 @@
     >
       <span>{{ i.title }}</span>
       <!--  -->
-      <div v-if="currentIndex == index" class="edit">
-        <i-ep-edit @click="editDetail(i.targetUrl)"></i-ep-edit>
-        <i-ep-delete @click.stop="deleteItem(i.targetUrl)"></i-ep-delete>
+      <div v-if="currentIndex == index && editMode" class="edit">
+        <i-ep-edit @click.stop="editDetail(i)"></i-ep-edit>
+        <i-ep-delete @click.stop="deleteItem(i.id)"></i-ep-delete>
       </div>
     </el-card>
     <el-card v-if="editMode" class="box lastBox" @click="showAdd">
@@ -45,9 +45,7 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button type="primary" @click="dialogVisible = false">
-            确认
-          </el-button>
+          <el-button type="primary" @click="confirmLabel"> 确认 </el-button>
           <el-button @click="dialogVisible = false">取消</el-button>
         </div>
       </template>
@@ -77,6 +75,7 @@ const formData = reactive({
   title: "",
   icon: "",
   desc: "",
+  id: "",
 });
 //拖拽事件
 const onDragStart = (event: DragEvent, index: number) => {
@@ -101,6 +100,14 @@ const onDragOver = (index: number) => {
 
 const showAdd = () => {
   dialogVisible.value = true;
+  resetData();
+};
+const resetData = () => {
+  formData.url = "";
+  formData.title = "";
+  formData.icon = "";
+  formData.desc = "";
+  formData.id = "";
 };
 
 //类似hover事件
@@ -109,15 +116,44 @@ const handleHover = (index: number) => {
 };
 
 //编辑书签
-const editDetail = (url: string) => {};
+const editDetail = (i: any) => {
+  dialogVisible.value = true;
+  formData.url = i.targetUrl;
+  formData.title = i.title;
+  formData.id = i.id;
+};
 
 //删除书签
-const deleteItem = (url: string) => {
-  initData.value = initData.value.filter((i) => i.targetUrl !== url);
+const deleteItem = (id: string) => {
+  initData.value = initData.value.filter((i) => i.id !== id);
   ElMessage({
     message: "删除书签成功",
     type: "success",
   });
+};
+
+//添加或修改标签
+const confirmLabel = () => {
+  dialogVisible.value = false;
+  if (formData.url && formData.title) {
+    let len = initData.value.filter((i) => i.id == formData.id).length;
+    if (len) {
+      initData.value.forEach((i) => {
+        if (i.id == formData.id) {
+          i.targetUrl = formData.url;
+          i.title = formData.title;
+        }
+      });
+    } else {
+      initData.value.push({
+        id: formData.title,
+        title: formData.title,
+        targetUrl: formData.url,
+        type: props.activeTab,
+        icon: formData.icon,
+      });
+    }
+  }
 };
 
 watch(

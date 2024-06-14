@@ -8,8 +8,12 @@
             :index="i.index"
             v-for="i in menus"
             :key="i.index"
-            >{{ i.title }}</el-menu-item
-          >
+            >{{ i.title }}
+            <div class="edit">
+              <i-ep-edit @click.stop="editDetail(i)"></i-ep-edit>
+              <i-ep-delete @click.stop="deleteItem(i.index)"></i-ep-delete>
+            </div>
+          </el-menu-item>
         </el-menu-item-group>
       </el-menu>
       <div class="btnGroup">
@@ -42,7 +46,7 @@
     </el-container>
     <el-dialog
       v-model="dialogVisible"
-      title="添加标签"
+      :title="mode == 'add' ? '添加标签' : '修改标签'"
       width="500"
       :before-close="handleClose"
     >
@@ -66,17 +70,19 @@ import MainLabel from "@/components/label/MainLabel.vue";
 import { menuList, Menu } from "@views/home/home";
 import { Search } from "@element-plus/icons-vue";
 import { reactive, ref } from "vue";
-import { ElMessageBox } from "element-plus";
+import { ElMessage, ElMessageBox } from "element-plus";
 // const state = reactive({
 //   menuList: menuList,
 // });
-const menus = reactive<Menu[]>(menuList);
+let menus = reactive<Menu[]>(menuList);
 const searchValue = ref<string>("");
 const activeTab = ref<string>("2");
 const dialogVisible = ref(false);
 const labelName = ref("");
 const statement = ref<string>("「凡所有相，皆为虚妄。若见诸相非相，即见如来」");
 const editMode = ref<boolean>(false);
+const mode = ref<string>("add");
+const index = ref<string>("");
 //切换菜单项
 const changeTab = (index: string) => {
   //   console.log(index);
@@ -85,7 +91,9 @@ const changeTab = (index: string) => {
 //新增菜单
 const createMenu = () => {
   dialogVisible.value = true;
+  mode.value = "add";
   labelName.value = "";
+  index.value = "";
 };
 const handleClose = (done: () => void) => {
   dialogVisible.value = false;
@@ -105,13 +113,43 @@ const exitMode = () => {
     message: "已退出编辑模式",
   });
 };
+//编辑左侧菜单标签
+const editDetail = (i: any) => {
+  mode.value = "update";
+  dialogVisible.value = true;
+  labelName.value = i.title;
+  index.value = i.index;
+};
 //添加标签
 const addType = () => {
-  menus.push({
-    index: menus.length + 1,
-    title: labelName.value,
-  });
+  if (index.value) {
+    menus.forEach((i) => {
+      if (i.index == index.value) {
+        i.title = labelName.value;
+      }
+    });
+  } else {
+    menus.push({
+      index: `${menus.length + 1}dd`,
+      title: labelName.value,
+    });
+  }
   dialogVisible.value = false;
+};
+//删除左侧菜单标签
+const deleteItem = (index: string) => {
+  ElMessageBox.confirm("是否确认删除", "Warning", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  }).then(() => {
+    // menus.splice(
+    //   0,
+    //   menus.length,
+    //   ...menus.filter((i: any) => i.index! == index)
+    // );
+    // console.log(menus);
+  });
 };
 </script>
 <style lang="less" scoped>
@@ -127,5 +165,17 @@ const addType = () => {
   display: flex;
   justify-content: space-around;
   align-items: center;
+}
+.edit {
+  display: none;
+}
+.el-menu-item {
+  justify-content: space-between;
+  &:hover .edit {
+    display: flex;
+    svg {
+      margin-right: 12px;
+    }
+  }
 }
 </style>
