@@ -1,5 +1,5 @@
 <template>
-  <el-container>
+  <el-container class="full-height">
     <el-aside width="200px">
       <el-menu :default-active="activeTab" class="el-menu-vertical-demo">
         <el-menu-item-group>
@@ -83,7 +83,7 @@
 
 <script setup lang="ts">
 import MainLabel from "@/components/label/MainLabel.vue";
-import { menuList, Menu ,getMotto} from "@views/home/home";
+import { menuList, Menu, getMotto } from "@views/home/home";
 import { Search } from "@element-plus/icons-vue";
 import { reactive, ref } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
@@ -96,7 +96,7 @@ const activeTab = ref<string>("2");
 const dialogVisible = ref(false);
 const labelName = ref("");
 const statement = reactive<object>({
-  moto:getMotto()
+  moto: getMotto(),
 });
 const editMode = ref<boolean>(false);
 const mode = ref<string>("add");
@@ -173,7 +173,7 @@ const goSearch = () => {
 .btnGroup {
   display: flex;
   justify-content: space-evenly;
-  margin-top: 20px;
+  margin: 20px 0;
   svg {
     cursor: pointer;
   }
@@ -197,5 +197,18 @@ const goSearch = () => {
 }
 .header {
   padding: 20px;
+}
+.full-height {
+  height: 100%;
+  width: 100vw;
+  .el-aside {
+    border-right: 1px solid #f1f1f1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .el-input {
+    width: 50%;
+  }
 }
 </style>
