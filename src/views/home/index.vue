@@ -11,7 +11,18 @@
             >{{ i.title }}
             <div class="edit">
               <i-ep-edit @click.stop="editDetail(i)"></i-ep-edit>
-              <i-ep-delete @click.stop="deleteItem(i.index)"></i-ep-delete>
+              <el-popconfirm
+                width="220"
+                confirm-button-text="确定"
+                cancel-button-text="取消"
+                icon-color="#626AEF"
+                title="是否确定要删除该标签?"
+                @confirm.stop="deleteItem(i.index)"
+              >
+                <template #reference>
+                  <i-ep-delete></i-ep-delete>
+                </template>
+              </el-popconfirm>
             </div>
           </el-menu-item>
         </el-menu-item-group>
@@ -25,19 +36,23 @@
       </div>
     </el-aside>
     <el-container>
-      <el-header>
+      <el-header class="header">
         <el-input
           v-model="searchValue"
           placeholder="请输入搜索内容"
-          :suffix-icon="Search"
-        />
+          @keyup.enter="goSearch"
+          clearable
+        >
+          <template #append>
+            <el-button :icon="Search" @click="goSearch" /> </template
+        ></el-input>
       </el-header>
       <el-main>
         <MainLabel :activeTab="activeTab" :editMode="editMode"></MainLabel>
       </el-main>
       <el-footer>
         <div class="bottom">
-          <p>{{ statement }}</p>
+          <p>{{ statement.moto }}</p>
           <el-link @click="exitMode" :underline="false" v-if="editMode"
             >退出编辑模式</el-link
           >
@@ -54,6 +69,7 @@
         v-model="labelName"
         style="width: 240px"
         placeholder="请输入标签名称"
+        @keyup.enter="addType"
       />
       <template #footer>
         <div class="dialog-footer">
@@ -67,7 +83,7 @@
 
 <script setup lang="ts">
 import MainLabel from "@/components/label/MainLabel.vue";
-import { menuList, Menu } from "@views/home/home";
+import { menuList, Menu ,getMotto} from "@views/home/home";
 import { Search } from "@element-plus/icons-vue";
 import { reactive, ref } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
@@ -79,7 +95,9 @@ const searchValue = ref<string>("");
 const activeTab = ref<string>("2");
 const dialogVisible = ref(false);
 const labelName = ref("");
-const statement = ref<string>("「凡所有相，皆为虚妄。若见诸相非相，即见如来」");
+const statement = reactive<object>({
+  moto:getMotto()
+});
 const editMode = ref<boolean>(false);
 const mode = ref<string>("add");
 const index = ref<string>("");
@@ -138,18 +156,17 @@ const addType = () => {
 };
 //删除左侧菜单标签
 const deleteItem = (index: string) => {
-  ElMessageBox.confirm("是否确认删除", "Warning", {
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    type: "warning",
-  }).then(() => {
-    // menus.splice(
-    //   0,
-    //   menus.length,
-    //   ...menus.filter((i: any) => i.index! == index)
-    // );
-    // console.log(menus);
-  });
+  const num = menus.findIndex((menu) => menu.index === index);
+  if (num !== -1) {
+    menus.splice(num, 1);
+  }
+};
+//跳转搜索
+const goSearch = () => {
+  window.open(
+    `https://www.baidu.com/s?ie=utf-8&word=${searchValue.value}`,
+    "_blank"
+  );
 };
 </script>
 <style lang="less" scoped>
@@ -177,5 +194,8 @@ const deleteItem = (index: string) => {
       margin-right: 12px;
     }
   }
+}
+.header {
+  padding: 20px;
 }
 </style>
