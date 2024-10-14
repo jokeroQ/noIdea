@@ -19,6 +19,10 @@ export const menuList: Menu[] = [
         index: '4',
         title: '常用工具'
     },
+    {
+        index: '5',
+        title: '有趣功能点尝试'
+    },
 ]
 
 const mottoList = [

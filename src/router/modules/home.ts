@@ -22,5 +22,13 @@ export default [
         meta: {
             title: '聊天页面'
         }
+    },
+    {
+        path: "/signPad",
+        name: "signPad",
+        component: () => import("@views/signPad/index.vue"),
+        meta: {
+            title: '签名板页面'
+        }
     }
 ]

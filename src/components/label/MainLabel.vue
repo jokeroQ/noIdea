@@ -4,7 +4,7 @@
       v-for="(i, index) in initData"
       :key="i.targetUrl"
       class="box draggable-item"
-      @click="linkTo(i.targetUrl)"
+      @click="linkTo(i.targetUrl,i.type)"
       :draggable="editMode"
       @dragstart="onDragStart($event, index)"
       @dragover.prevent="onDragOver(index)"
@@ -55,14 +55,22 @@
 <script lang="ts" setup>
 import { defineProps, watch } from "vue";
 import { labelData } from "./label";
+import { useRouter } from "vue-router";
 const props = defineProps<{
   activeTab: string;
   editMode: boolean;
 }>();
+const router=useRouter();
 const currentIndex = ref<number | null>(null);
 const draggedItemIndex = ref<number | null>(null);
-const linkTo = (url: string) => {
-  window.open(url, "_blank");
+const linkTo = (url: string,type:string) => {
+  if(type=='5'){
+    router.push({
+      path:url
+    })
+  }else{
+    window.open(url, "_blank");
+  }
 };
 const dialogVisible = ref<boolean>(false);
 

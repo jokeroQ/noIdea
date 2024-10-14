@@ -70,4 +70,11 @@ export const labelData: labelType[] = [
     type: '4',
     id: 'github2'
   },
+  {
+    icon: ' &#xe640;',
+    title: '签名版',
+    targetUrl: '/signPad',
+    type: '5',
+    id: 'signFunction'
+  },
 ]
