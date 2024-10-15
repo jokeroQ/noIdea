@@ -77,4 +77,11 @@ export const labelData: labelType[] = [
     type: '5',
     id: 'signFunction'
   },
+  {
+    icon: ' &#xe640;',
+    title: '聊天框样式',
+    targetUrl: '/chat',
+    type: '5',
+    id: 'chatFunction'
+  },
 ]

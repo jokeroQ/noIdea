@@ -46,7 +46,7 @@ async function loginIn() {
     formLabelAlign.username == "admin" && formLabelAlign.password == "777";
   if (flag) {
     isLoading.value = true;
-    await delay(2000);
+    await delay(200);
     isLoading.value = false;
     router.push('/home')
   }

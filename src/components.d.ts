@@ -37,7 +37,6 @@ declare module 'vue' {
     Register: typeof import('./components/login/register.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    ThemeSwitch: typeof import('./components/themeStyle/themeSwitch.vue')['default']
   }
   export interface ComponentCustomProperties {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']
