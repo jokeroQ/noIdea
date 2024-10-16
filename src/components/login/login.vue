@@ -20,6 +20,7 @@
           />
         </el-form-item>
         <div class="btnGroup">
+          <el-button  @click="goRegister">注册</el-button>
           <el-button type="primary" @click="loginIn" @keyup.enter="loginIn">登录</el-button>
         </div>
       </el-form>
@@ -33,6 +34,7 @@ import { reactive, ref } from "vue";
 import type { FormProps } from "element-plus";
 import { delay } from "@/utils/delay";
 import { useRouter } from "vue-router";
+import { register } from "module";
 const labelPosition = ref<FormProps["labelPosition"]>("right");
 const formLabelAlign = reactive({
   username: "admin",
@@ -54,6 +56,9 @@ async function loginIn() {
     message: flag ? "登录成功" : "用户名密码错误，请重新输入",
     type: flag ? "success" : "error",
   });
+}
+const goRegister=()=>{
+  router.push('./register')
 }
 </script>
 
