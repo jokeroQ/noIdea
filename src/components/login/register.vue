@@ -1,6 +1,7 @@
 //注册页面
 <template>
-  <div class="w-full h-full m-auto">
+  <div class="p-4 w-full h-full m-auto">
+    <el-button type="primary" :icon="Back" circle @click="goBack" />
     <el-form
       label-width="auto"
       :model="formLabelAlign"
@@ -24,7 +25,10 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
+import { Back } from "@element-plus/icons-vue";
 import axios from "axios";
+import { useRouter } from "vue-router";
+const router = useRouter();
 const formLabelAlign = reactive({
   username: "",
   password: "",
@@ -34,13 +38,16 @@ const formLabelAlign = reactive({
 const onSubmit = async() => {
   try {
     const response = await axios.post(
-      "http://localhost:3000/register",
+      "http://localhost:3000/api/users/register",
       formLabelAlign
     );
     console.log("注册成功:", response.data);
   } catch (error) {
     console.error("注册失败:", error);
   }
+};
+const goBack = () => {
+  router.go(-1);
 };
 </script>
 

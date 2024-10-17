@@ -20,8 +20,10 @@
           />
         </el-form-item>
         <div class="btnGroup">
-          <el-button  @click="goRegister">注册</el-button>
-          <el-button type="primary" @click="loginIn" @keyup.enter="loginIn">登录</el-button>
+          <el-button @click="goRegister">注册</el-button>
+          <el-button type="primary" @click="loginIn" @keyup.enter="loginIn"
+            >登录</el-button
+          >
         </div>
       </el-form>
     </div>
@@ -34,32 +36,37 @@ import { reactive, ref } from "vue";
 import type { FormProps } from "element-plus";
 import { delay } from "@/utils/delay";
 import { useRouter } from "vue-router";
-import { register } from "module";
+import axios from "axios";
+
 const labelPosition = ref<FormProps["labelPosition"]>("right");
 const formLabelAlign = reactive({
   username: "admin",
   password: "",
 });
 const isLoading = ref(false);
-const router=useRouter();
+const router = useRouter();
+const loginIn = async () => {
+  try {
+     await axios.post(
+      "http://localhost:3000/api/users/login",
+      formLabelAlign
+    );
+    ElMessage({
+      message: "登录成功",
+      type: "success",
+    });
+    router.push("/home");
 
-async function loginIn() {
-  let flag =
-    formLabelAlign.username == "admin" && formLabelAlign.password == "777";
-  if (flag) {
-    isLoading.value = true;
-    await delay(200);
-    isLoading.value = false;
-    router.push('/home')
+  } catch (error:any) {
+    ElMessage({
+      message: error.message,
+      type: "error",
+    });
   }
-  ElMessage({
-    message: flag ? "登录成功" : "用户名密码错误，请重新输入",
-    type: flag ? "success" : "error",
-  });
-}
-const goRegister=()=>{
-  router.push('./register')
-}
+};
+const goRegister = () => {
+  router.push("./register");
+};
 </script>
 
 <style scoped lang="less">
